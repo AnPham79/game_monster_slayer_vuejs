@@ -1,44 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vue Basics</title>
     <link
-      href="https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap"
-      rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap"
+        rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="app.js" defer></script>
-  </head>
-  <body>
-    <header>
-      <h1>Monster Slayer</h1>
-    </header>
-    <div id="game">
-      <section id="monster" class="container">
+</head>
+<body>
+<header>
+    <h1>Monster Slayer</h1>
+</header>
+<div id="game">
+    <section id="monster" class="container">
         <h2>Monster Health</h2>
         <div class="healthbar">
-          <div class="healthbar__value" :style="monsterBarStyle">{{ monsterHealth }}%</div>
+            <div class="healthbar__value" :style="monsterBarStyle">{{ monsterHealth }}%</div>
         </div>
-      </section>
-      <section id="player" class="container">
+    </section>
+    <section id="player" class="container">
         <h2>Your Health</h2>
         <div class="healthbar">
-          <div class="healthbar__value" :style="playerBarStyle">{{ playerHealth }}%</div>
+            <div class="healthbar__value" :style="playerBarStyle">{{ playerHealth }}%</div>
         </div>
-      </section>
-      <section id="controls">
+    </section>
+    <section class="container" v-if="winner">
+        <h2>Game Over!</h2>
+        <h3 v-if="winner === 'monster'">You lost!</h3>
+        <h3 v-else-if="winner === 'player'">You won!</h3>
+        <h3 v-else>It's a draw!</h3>
+    </section>
+    <section id="controls" v-else>
         <button @click="attackMonster">ATTACK</button>
         <button :disabled="mayPlayerSpecialAttack" @click="specialAttackMonster">SPECIAL ATTACK</button>
-        <button @click="heal">HEAL</button>
-        <button>SURRENDER</button>
-      </section>
-      <section id="log" class="container">
+        <button :disabled="mayPlayerHeal" @click="heal">HEAL</button>
+        <button @click="surrender">SURRENDER</button>
+    </section>
+    <section id="log" class="container">
         <h2>Battle Log</h2>
-        <ul></ul>
-      </section>
-    </div>
-  </body>
+        <ul>
+            <li v-for="(log, index) in logMessages" :key="index">
+                {{ log.actionBy }} {{ log.actionType }} {{ log.actionValue }}
+            </li>
+        </ul>
+    </section>
+</div>
+</body>
 </html>
